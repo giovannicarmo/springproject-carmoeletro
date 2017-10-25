@@ -1,27 +1,27 @@
 package com.giovannicarmo.projetocurso.carmoeletro.resources;
 
 import com.giovannicarmo.projetocurso.carmoeletro.domain.Category;
+import com.giovannicarmo.projetocurso.carmoeletro.services.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/categories")
 public class CategoryResource {
 
-    @RequestMapping(method = RequestMethod.GET)
-    public List<Category> list() {
+    @Autowired
+    private CategoryService categoryService;
 
-        Category category1 = new Category(1, "Informatica");
-        Category category2 = new Category(2,"Escritorio");
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> find(@PathVariable Integer id) {
 
-        List<Category> list = new ArrayList<>();
-        list.add(category1);
-        list.add(category2);
-
-        return list;
+        Category category = categoryService.find(id);
+        return ResponseEntity.ok().body(category);
     }
 }
