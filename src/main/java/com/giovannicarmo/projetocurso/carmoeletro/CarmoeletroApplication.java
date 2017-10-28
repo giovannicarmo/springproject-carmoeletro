@@ -1,13 +1,8 @@
 package com.giovannicarmo.projetocurso.carmoeletro;
 
-import com.giovannicarmo.projetocurso.carmoeletro.domain.Category;
-import com.giovannicarmo.projetocurso.carmoeletro.domain.City;
-import com.giovannicarmo.projetocurso.carmoeletro.domain.Product;
-import com.giovannicarmo.projetocurso.carmoeletro.domain.State;
-import com.giovannicarmo.projetocurso.carmoeletro.repositories.CategoryRepository;
-import com.giovannicarmo.projetocurso.carmoeletro.repositories.CityRepository;
-import com.giovannicarmo.projetocurso.carmoeletro.repositories.ProductRepository;
-import com.giovannicarmo.projetocurso.carmoeletro.repositories.StateRepository;
+import com.giovannicarmo.projetocurso.carmoeletro.domain.*;
+import com.giovannicarmo.projetocurso.carmoeletro.domain.enums.ClientType;
+import com.giovannicarmo.projetocurso.carmoeletro.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,6 +21,10 @@ public class CarmoeletroApplication implements CommandLineRunner{
     private StateRepository stateRepository;
     @Autowired
     private CityRepository cityRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CarmoeletroApplication.class, args);
@@ -49,6 +48,18 @@ public class CarmoeletroApplication implements CommandLineRunner{
         City city2 = new City(null, "Sao Paulo", state2);
         City city3 = new City(null, "Campinas", state2);
 
+        Client client = new Client(null, "maria@gmail.com", "Maria Silva", "12256592390",
+                                    ClientType.PESSOAFISICA);
+
+        client.getTelephones().addAll(Arrays.asList("21011877", "21011865"));
+
+        Address address1 = new Address(null, "Rua Flores", "300", "Apto 203",
+                                        "Jardim", "38220750", client, city1);
+
+        Address address2 = new Address(null, "Avenida Matos", "105", "Sala 600",
+                                        "Centro", "38777091", client, city2);
+
+        client.getAddresses().addAll(Arrays.asList(address1, address2));
 
         category1.getProducts().addAll(Arrays.asList(product1, product2, product3));
         category2.getProducts().addAll(Arrays.asList(product2));
@@ -64,5 +75,7 @@ public class CarmoeletroApplication implements CommandLineRunner{
         productRepository.save(Arrays.asList(product1, product2, product3));
         stateRepository.save(Arrays.asList(state1, state2));
         cityRepository.save(Arrays.asList(city1, city2, city3));
+        clientRepository.save(Arrays.asList(client));
+        addressRepository.save(Arrays.asList(address1, address2));
     }
 }
