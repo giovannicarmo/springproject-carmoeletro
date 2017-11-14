@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
+@Table(name = "ORDER_TB")
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
