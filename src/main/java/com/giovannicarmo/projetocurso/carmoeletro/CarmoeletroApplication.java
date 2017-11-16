@@ -31,6 +31,8 @@ public class CarmoeletroApplication implements CommandLineRunner {
     private OrderRepository orderRepository;
     @Autowired
     private PaymentRepository paymentRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(CarmoeletroApplication.class, args);
@@ -97,5 +99,17 @@ public class CarmoeletroApplication implements CommandLineRunner {
         orderRepository.save(Arrays.asList(ped1, ped2));
         paymentRepository.save(Arrays.asList(pagto1, pagto2));
 
+        OrderItem item1 = new OrderItem(ped1, p1, 0.00, 2000.00, 1);
+        OrderItem item2 = new OrderItem(ped1, p3, 100.00, 80.00, 1);
+        OrderItem item3 = new OrderItem(ped2, p2, 100.00, 800.00, 1);
+
+        ped1.getItems().addAll(Arrays.asList(item1, item2));
+        ped2.getItems().addAll(Arrays.asList(item3));
+
+        p1.getItems().addAll(Arrays.asList(item1));
+        p2.getItems().addAll(Arrays.asList(item3));
+        p3.getItems().addAll(Arrays.asList(item2));
+
+        orderItemRepository.save(Arrays.asList(item1, item2, item3));
     }
 }

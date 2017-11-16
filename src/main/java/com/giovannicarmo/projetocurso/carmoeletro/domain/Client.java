@@ -1,5 +1,6 @@
 package com.giovannicarmo.projetocurso.carmoeletro.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.enums.ClientType;
 
@@ -25,6 +26,7 @@ public class Client implements Serializable {
     @OneToMany(mappedBy = "client")
     private List<Address> addresses = new ArrayList<>();
 
+    @JsonBackReference
     @OneToMany(mappedBy = "client")
     private List<Order> orders = new ArrayList<>();
 
