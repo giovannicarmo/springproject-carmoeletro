@@ -1,7 +1,6 @@
 package com.giovannicarmo.projetocurso.carmoeletro.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.enums.ClientType;
 
 import javax.persistence.*;
@@ -22,11 +21,10 @@ public class Client implements Serializable {
     @CollectionTable(name = "TELEFONE")
     private Set<String> telephones = new HashSet<>();
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "client")
     private List<Address> addresses = new ArrayList<>();
 
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "client")
     private List<Order> orders = new ArrayList<>();
 

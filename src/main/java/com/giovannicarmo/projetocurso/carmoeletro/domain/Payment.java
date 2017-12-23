@@ -1,6 +1,6 @@
 package com.giovannicarmo.projetocurso.carmoeletro.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.enums.PaymentState;
 
 import javax.persistence.*;
@@ -16,7 +16,7 @@ public abstract class Payment implements Serializable {
     private Integer id;
     private PaymentState paymentState;
 
-    @JsonBackReference
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "order_id")
     @MapsId
