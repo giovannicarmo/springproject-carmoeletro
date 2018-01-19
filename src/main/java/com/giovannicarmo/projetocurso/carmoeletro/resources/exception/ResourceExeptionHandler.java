@@ -1,5 +1,6 @@
 package com.giovannicarmo.projetocurso.carmoeletro.resources.exception;
 
+import com.giovannicarmo.projetocurso.carmoeletro.services.exception.DataIntegrityException;
 import com.giovannicarmo.projetocurso.carmoeletro.services.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,5 +18,13 @@ public class ResourceExeptionHandler {
         StandardError error = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(),
                                                 System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(DataIntegrityException.class)
+    public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException e, HttpServletRequest request) {
+
+        StandardError error = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(),
+                System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }

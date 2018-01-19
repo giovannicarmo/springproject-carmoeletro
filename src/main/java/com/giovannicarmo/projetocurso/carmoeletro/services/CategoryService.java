@@ -2,8 +2,10 @@ package com.giovannicarmo.projetocurso.carmoeletro.services;
 
 import com.giovannicarmo.projetocurso.carmoeletro.domain.Category;
 import com.giovannicarmo.projetocurso.carmoeletro.repositories.CategoryRepository;
+import com.giovannicarmo.projetocurso.carmoeletro.services.exception.DataIntegrityException;
 import com.giovannicarmo.projetocurso.carmoeletro.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,5 +25,19 @@ public class CategoryService {
     public Category insert (Category category) {
         category.setId(null);
         return categoryRepository.save(category);
+    }
+
+    public Category update(Category category) {
+        find(category.getId());
+        return categoryRepository.save(category);
+    }
+
+    public void delete(Integer id) {
+        find(id);
+        try {
+            categoryRepository.delete(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new  DataIntegrityException("Don't possible delete a category with products!");
+        }
     }
 }
