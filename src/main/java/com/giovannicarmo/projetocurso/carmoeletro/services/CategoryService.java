@@ -19,4 +19,9 @@ public class CategoryService {
         }
         return category;
     }
+
+    public Category insert (Category category) {
+        category.setId(null);
+        return categoryRepository.save(category);
+    }
 }
