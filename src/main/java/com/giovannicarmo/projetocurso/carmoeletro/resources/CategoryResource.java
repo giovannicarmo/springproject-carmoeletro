@@ -1,6 +1,7 @@
 package com.giovannicarmo.projetocurso.carmoeletro.resources;
 
 import com.giovannicarmo.projetocurso.carmoeletro.domain.Category;
+import com.giovannicarmo.projetocurso.carmoeletro.dto.CategoryDTO;
 import com.giovannicarmo.projetocurso.carmoeletro.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -16,6 +19,14 @@ public class CategoryResource {
 
     @Autowired
     private CategoryService categoryService;
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<List<CategoryDTO>> findAll() {
+        List<Category> categories = categoryService.findAll();
+        List<CategoryDTO> categoryDTOS = categories.stream().map(category ->
+                new CategoryDTO(category)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(categoryDTOS);
+    }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Category> find(@PathVariable Integer id) {
