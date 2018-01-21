@@ -1,6 +1,7 @@
 package com.giovannicarmo.projetocurso.carmoeletro.services;
 
 import com.giovannicarmo.projetocurso.carmoeletro.domain.Category;
+import com.giovannicarmo.projetocurso.carmoeletro.dto.CategoryDTO;
 import com.giovannicarmo.projetocurso.carmoeletro.repositories.CategoryRepository;
 import com.giovannicarmo.projetocurso.carmoeletro.services.exception.DataIntegrityException;
 import com.giovannicarmo.projetocurso.carmoeletro.services.exception.ObjectNotFoundException;
@@ -53,5 +54,9 @@ public class CategoryService {
         } catch (DataIntegrityViolationException e) {
             throw new  DataIntegrityException("Don't possible delete a category with products!");
         }
+    }
+
+    public Category fromDTO(CategoryDTO categoryDTO) {
+        return new Category(categoryDTO.getId(), categoryDTO.getName());
     }
 }
