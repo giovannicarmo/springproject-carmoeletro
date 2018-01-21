@@ -6,6 +6,9 @@ import com.giovannicarmo.projetocurso.carmoeletro.services.exception.DataIntegri
 import com.giovannicarmo.projetocurso.carmoeletro.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +29,11 @@ public class CategoryService {
             throw new ObjectNotFoundException("Object not found! Id: " + id + " Type: " + Category.class.getName());
         }
         return category;
+    }
+
+    public Page<Category> findPage(Integer page, Integer linesPerPage, String direction, String orderBy) {
+        PageRequest pageRequest = new PageRequest(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        return categoryRepository.findAll(pageRequest);
     }
 
     public Category insert (Category category) {
