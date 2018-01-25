@@ -76,7 +76,7 @@ public class CarmoeletroApplication implements CommandLineRunner {
         stateRepository.save(Arrays.asList(est1, est2));
         cityRepository.save(Arrays.asList(c1, c2, c3));
 
-        Client cli1 = new Client(null, "Maria Silva", "maria@gmail.com", "36378912377", ClientType.PESSOAFISICA);
+        Client cli1 = new Client(null, "maria@gmail.com", "Maria Silva", "36378912377", ClientType.PESSOAFISICA);
 
         cli1.getTelephones().addAll(Arrays.asList("27363323", "93838393"));
 

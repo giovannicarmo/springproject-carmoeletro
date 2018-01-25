@@ -18,45 +18,45 @@ import java.util.List;
 public class CategoryService {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryRepository repository;
 
     public List<Category> findAll() {
-        return categoryRepository.findAll();
+        return repository.findAll();
     }
 
     public Category find (Integer id){
-        Category category = categoryRepository.findOne(id);
-        if (category == null) {
+        Category object = repository.findOne(id);
+        if (object == null) {
             throw new ObjectNotFoundException("Object not found! Id: " + id + " Type: " + Category.class.getName());
         }
-        return category;
+        return object;
     }
 
     public Page<Category> findPage(Integer page, Integer linesPerPage, String direction, String orderBy) {
         PageRequest pageRequest = new PageRequest(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
-        return categoryRepository.findAll(pageRequest);
+        return repository.findAll(pageRequest);
     }
 
-    public Category insert (Category category) {
-        category.setId(null);
-        return categoryRepository.save(category);
+    public Category insert (Category object) {
+        object.setId(null);
+        return repository.save(object);
     }
 
-    public Category update(Category category) {
-        find(category.getId());
-        return categoryRepository.save(category);
+    public Category update(Category object) {
+        find(object.getId());
+        return repository.save(object);
     }
 
     public void delete(Integer id) {
         find(id);
         try {
-            categoryRepository.delete(id);
+            repository.delete(id);
         } catch (DataIntegrityViolationException e) {
-            throw new  DataIntegrityException("Don't possible delete a category with products!");
+            throw new  DataIntegrityException("Don't possible delete a object with products!");
         }
     }
 
-    public Category fromDTO(CategoryDTO categoryDTO) {
-        return new Category(categoryDTO.getId(), categoryDTO.getName());
+    public Category fromDTO(CategoryDTO objectDTO) {
+        return new Category(objectDTO.getId(), objectDTO.getName());
     }
 }
