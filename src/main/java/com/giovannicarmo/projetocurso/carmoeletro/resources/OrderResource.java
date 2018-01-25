@@ -1,6 +1,7 @@
 package com.giovannicarmo.projetocurso.carmoeletro.resources;
 
 import com.giovannicarmo.projetocurso.carmoeletro.domain.Order;
+import com.giovannicarmo.projetocurso.carmoeletro.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
