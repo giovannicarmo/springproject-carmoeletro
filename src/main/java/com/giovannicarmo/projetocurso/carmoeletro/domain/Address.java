@@ -14,7 +14,11 @@ public class Address implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String publicPlace, number, complement, neighborhood, zipCode;
+    private String publicPlace;
+    private String number;
+    private String complement;
+    private String neighborhood;
+    private String zipCode;
 
     @JsonIgnore
     @ManyToOne

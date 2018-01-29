@@ -14,7 +14,9 @@ public class Client implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String email, name, cpfOrCnpj;
+    private String name;
+    private String email;
+    private String cpfOrCnpj;
     private Integer type;
 
     @ElementCollection
@@ -25,16 +27,16 @@ public class Client implements Serializable {
     private List<Address> addresses = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
     public Client() {
     }
 
-    public Client(Integer id, String email, String name, String cpfOrCnpj, ClientType type) {
+    public Client(Integer id, String name, String email, String cpfOrCnpj, ClientType type) {
         super();
-        this.email = email;
         this.name = name;
+        this.email = email;
         this.cpfOrCnpj = cpfOrCnpj;
         this.type = (type == null) ? null : type.getId();
     }
@@ -47,20 +49,20 @@ public class Client implements Serializable {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getCpfOrCnpj() {

@@ -15,7 +15,8 @@ public class OrderItem implements Serializable {
     @EmbeddedId
     private OrderItemPK id = new OrderItemPK();
 
-    private Double discount, price;
+    private Double discount;
+    private Double price;
     private Integer amount;
 
     public OrderItem() {

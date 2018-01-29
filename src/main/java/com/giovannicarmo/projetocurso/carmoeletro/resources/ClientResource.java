@@ -2,6 +2,7 @@ package com.giovannicarmo.projetocurso.carmoeletro.resources;
 
 import com.giovannicarmo.projetocurso.carmoeletro.domain.Client;
 import com.giovannicarmo.projetocurso.carmoeletro.dto.ClientDTO;
+import com.giovannicarmo.projetocurso.carmoeletro.dto.ClientNewDTO;
 import com.giovannicarmo.projetocurso.carmoeletro.services.ClientService;
 import com.giovannicarmo.projetocurso.carmoeletro.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class ClientResource {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> insert (@Valid @RequestBody ClientDTO objectDTO) {
+    public ResponseEntity<Void> insert (@Valid @RequestBody ClientNewDTO objectDTO) {
         Client object = service.fromDTO(objectDTO);
         object = service.insert(object);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
