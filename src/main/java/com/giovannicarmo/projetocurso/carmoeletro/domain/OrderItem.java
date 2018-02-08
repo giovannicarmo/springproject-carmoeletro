@@ -23,7 +23,6 @@ public class OrderItem implements Serializable {
     }
 
     public OrderItem(Order order, Product product, Double discount, Double price, Integer amount) {
-        super();
         id.setOrder(order);
         id.setProduct(product);
         this.discount = discount;

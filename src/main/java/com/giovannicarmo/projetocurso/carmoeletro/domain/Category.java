@@ -21,9 +21,7 @@ public class Category implements Serializable {
     public Category(){
     }
 
-    public Category(Integer id, String name){
-
-        super();
+    public Category(Integer id, String name){ ;
         this.id = id;
         this.name = name;
     }
