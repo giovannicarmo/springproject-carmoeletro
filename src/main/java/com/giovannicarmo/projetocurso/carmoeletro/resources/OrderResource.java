@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderResource {
 
     @Autowired
-    private OrderService orderService;
+    private OrderService service;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> find(@PathVariable Integer id) {
 
-        Order order = orderService.find(id);
-        return ResponseEntity.ok().body(order);
+        Order object = service.find(id);
+        return ResponseEntity.ok().body(object);
     }
 }

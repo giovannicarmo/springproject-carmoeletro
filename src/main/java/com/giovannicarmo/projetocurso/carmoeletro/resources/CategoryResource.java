@@ -38,8 +38,8 @@ public class CategoryResource {
             @RequestParam(value = "direction", defaultValue = "ASC") String direction
     ) {
         Page<Category> list = service.findPage(page, linesPerPage, direction, orderBy);
-        Page<CategoryDTO> objectDTOS = list.map(object -> new CategoryDTO(object));
-        return ResponseEntity.ok().body(objectDTOS);
+        Page<CategoryDTO> listDTOS = list.map(object -> new CategoryDTO(object));
+        return ResponseEntity.ok().body(listDTOS);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

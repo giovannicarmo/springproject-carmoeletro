@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 public class OrderService {
 
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderRepository repository;
 
     public Order find (Integer id){
-        Order order = orderRepository.findOne(id);
-        if (order == null) {
+        Order object = repository.findOne(id);
+        if (object == null) {
             throw new ObjectNotFoundException("Object not found! Id: " + id + " Type: " + Order.class.getName());
         }
-        return order;
+        return object;
     }
 }

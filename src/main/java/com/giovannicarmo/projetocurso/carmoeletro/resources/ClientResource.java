@@ -40,8 +40,8 @@ public class ClientResource {
             @RequestParam(value = "direction", defaultValue = "ASC") String direction
     ) {
         Page<Client> list = service.findPage(page, linesPerPage, direction, orderBy);
-        Page<ClientDTO> objectDTOS = list.map(object -> new ClientDTO(object));
-        return ResponseEntity.ok().body(objectDTOS);
+        Page<ClientDTO> listDTOS = list.map(object -> new ClientDTO(object));
+        return ResponseEntity.ok().body(listDTOS);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
