@@ -33,6 +33,6 @@ public class ProductService {
     public Page<Product> search(String name, List<Integer> ids, Integer page, Integer linesPerPage, String direction, String orderBy) {
         PageRequest pageRequest = new PageRequest(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         List<Category> categories =  categoryRepository.findAll(ids);
-        return repository.findDistinctByNameContainingAndCategoriesIn(name, categories, pageRequest);
+        return repository.findDistinctByNameIgnoreCaseContainingAndCategoriesIn(name, categories, pageRequest);
     }
 }

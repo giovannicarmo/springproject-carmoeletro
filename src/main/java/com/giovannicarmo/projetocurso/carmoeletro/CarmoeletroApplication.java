@@ -125,9 +125,9 @@ public class CarmoeletroApplication implements CommandLineRunner {
         orderRepository.save(Arrays.asList(ped1, ped2));
         paymentRepository.save(Arrays.asList(pagto1, pagto2));
 
-        OrderItem item1 = new OrderItem(ped1, p1, 0.00, 2000.00, 1);
-        OrderItem item2 = new OrderItem(ped1, p3, 100.00, 80.00, 1);
-        OrderItem item3 = new OrderItem(ped2, p2, 100.00, 800.00, 1);
+        OrderItem item1 = new OrderItem(ped1, p1, 50.00, 2000.00, 1.0);
+        OrderItem item2 = new OrderItem(ped1, p3, 0.00, 80.00, 1.0);
+        OrderItem item3 = new OrderItem(ped2, p2, 100.00, 800.00, 1.0);
 
         ped1.getItems().addAll(Arrays.asList(item1, item2));
         ped2.getItems().addAll(Arrays.asList(item3));

@@ -17,12 +17,12 @@ public class OrderItem implements Serializable {
 
     private Double discount;
     private Double price;
-    private Integer amount;
+    private Double amount;
 
     public OrderItem() {
     }
 
-    public OrderItem(Order order, Product product, Double discount, Double price, Integer amount) {
+    public OrderItem(Order order, Product product, Double discount, Double price, Double amount) {
         id.setOrder(order);
         id.setProduct(product);
         this.discount = discount;
@@ -35,9 +35,17 @@ public class OrderItem implements Serializable {
         return id.getOrder();
     }
 
+    public void setOrder (Order order) {
+        id.setOrder(order);
+    }
+
     @JsonIgnore
     public Product getProduct() {
         return id.getProduct();
+    }
+
+    public void setProduct(Product product) {
+        id.setProduct(product);
     }
 
     public OrderItemPK getId() {
@@ -64,12 +72,16 @@ public class OrderItem implements Serializable {
         this.price = price;
     }
 
-    public Integer getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public double getSubTotal() {
+        return (price - discount) * amount;
     }
 
     @Override
