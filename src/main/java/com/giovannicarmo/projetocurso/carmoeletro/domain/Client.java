@@ -2,10 +2,12 @@ package com.giovannicarmo.projetocurso.carmoeletro.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.enums.ClientType;
+import com.giovannicarmo.projetocurso.carmoeletro.domain.enums.Profile;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Client implements Serializable {
@@ -22,6 +24,13 @@ public class Client implements Serializable {
     private String cpfOrCnpj;
     private Integer type;
 
+    @JsonIgnore
+    private String password;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name="PROFILES")
+    private Set<Integer> profiles = new HashSet<>();
+
     @ElementCollection
     @CollectionTable(name = "TELEFONE")
     private Set<String> telephones = new HashSet<>();
@@ -34,14 +43,18 @@ public class Client implements Serializable {
     private List<Order> orders = new ArrayList<>();
 
     public Client() {
+        addProfile(Profile.CLIENT);
     }
 
-    public Client(Integer id, String name, String email, String cpfOrCnpj, ClientType type) {
+    public Client(Integer id, String name, String email, String cpfOrCnpj, ClientType type,
+                  String password) {
         super();
         this.name = name;
         this.email = email;
         this.cpfOrCnpj = cpfOrCnpj;
         this.type = (type == null) ? null : type.getId();
+        this.password = password;
+        addProfile(Profile.CLIENT);
     }
 
     public Integer getId() {
@@ -82,6 +95,22 @@ public class Client implements Serializable {
 
     public void setType(ClientType type) {
         this.type = type.getId();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Profile> getProfiles() {
+        return profiles.stream().map(x -> Profile.toEnum(x)).collect(Collectors.toSet());
+    }
+
+    public void addProfile(Profile profile) {
+        profiles.add(profile.getId());
     }
 
     public Set<String> getTelephones() {

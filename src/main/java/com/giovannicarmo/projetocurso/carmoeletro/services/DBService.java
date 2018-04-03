@@ -3,8 +3,10 @@ package com.giovannicarmo.projetocurso.carmoeletro.services;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.*;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.enums.ClientType;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.enums.PaymentState;
+import com.giovannicarmo.projetocurso.carmoeletro.domain.enums.Profile;
 import com.giovannicarmo.projetocurso.carmoeletro.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -14,6 +16,8 @@ import java.util.Arrays;
 @Service
 public class DBService {
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
@@ -91,16 +95,23 @@ public class DBService {
         stateRepository.save(Arrays.asList(est1, est2));
         cityRepository.save(Arrays.asList(c1, c2, c3));
 
-        Client cli1 = new Client(null, "Maria Silva", "maria@gmail.com", "36378912377", ClientType.PESSOAFISICA);
+        Client cli1 = new Client(null, "Maria Silva", "maria@gmail.com", "36378912377", ClientType.PESSOAFISICA, passwordEncoder.encode("batata"));
 
         cli1.getTelephones().addAll(Arrays.asList("27363323", "93838393"));
 
+        Client cli2 = new Client(null, "Ana Costa", "nelio.iftm@gmail.com", "31628382740", ClientType.PESSOAFISICA, passwordEncoder.encode("123"));
+
+        cli2.getTelephones().addAll(Arrays.asList("93883321", "34252625"));
+
+        cli2.addProfile(Profile.ADIMIN);
+
         Address e1 = new Address(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, c1);
         Address e2 = new Address(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
+        Address e3 = new Address(null, "Avenida Floriano", "2106", null, "Centro", "281777012", cli2, c2);
 
-        cli1.getAddresses().addAll(Arrays.asList(e1, e2));
+        cli1.getAddresses().addAll(Arrays.asList(e1, e2,e3));
 
-        clientRepository.save(Arrays.asList(cli1));
+        clientRepository.save(Arrays.asList(cli1, cli2));
         addressRepository.save(Arrays.asList(e1, e2));
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
