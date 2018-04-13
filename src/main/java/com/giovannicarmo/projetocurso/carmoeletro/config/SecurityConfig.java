@@ -1,6 +1,7 @@
 package com.giovannicarmo.projetocurso.carmoeletro.config;
 
 import com.giovannicarmo.projetocurso.carmoeletro.security.JWTAuthenticationFilter;
+import com.giovannicarmo.projetocurso.carmoeletro.security.JWTAuthorizationFilter;
 import com.giovannicarmo.projetocurso.carmoeletro.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -56,12 +57,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(PUBLIC_MATCHERS).permitAll()
                 .anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
-    public void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
     @Bean
