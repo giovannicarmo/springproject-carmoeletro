@@ -4,12 +4,14 @@ import com.giovannicarmo.projetocurso.carmoeletro.domain.Address;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.City;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.Client;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.enums.ClientType;
+import com.giovannicarmo.projetocurso.carmoeletro.domain.enums.Profile;
 import com.giovannicarmo.projetocurso.carmoeletro.dto.ClientDTO;
 import com.giovannicarmo.projetocurso.carmoeletro.dto.ClientNewDTO;
 import com.giovannicarmo.projetocurso.carmoeletro.repositories.AddressRepository;
 import com.giovannicarmo.projetocurso.carmoeletro.repositories.CityRepository;
 import com.giovannicarmo.projetocurso.carmoeletro.repositories.ClientRepository;
-import com.giovannicarmo.projetocurso.carmoeletro.repositories.ClientRepository;
+import com.giovannicarmo.projetocurso.carmoeletro.security.UserSS;
+import com.giovannicarmo.projetocurso.carmoeletro.services.exception.AuthorizationExcepition;
 import com.giovannicarmo.projetocurso.carmoeletro.services.exception.DataIntegrityException;
 import com.giovannicarmo.projetocurso.carmoeletro.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,12 @@ public class ClientService {
     }
 
     public Client find (Integer id){
+
+        UserSS userSS = UserService.authenticated();
+        if (userSS == null || !userSS.hasRole(Profile.ADIMIN) && !id.equals(userSS.getId())) {
+            throw new AuthorizationExcepition("Access denied!");
+        }
+
         Client object = repository.findOne(id);
         if (object == null) {
             throw new ObjectNotFoundException("Object not found! Id: " + id + " Type: " + Client.class.getName());

@@ -6,6 +6,7 @@ import com.giovannicarmo.projetocurso.carmoeletro.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -49,6 +50,7 @@ public class CategoryResource {
         return ResponseEntity.ok().body(object);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> insert (@Valid @RequestBody CategoryDTO objectDTO) {
         Category object = service.fromDTO(objectDTO);
@@ -58,6 +60,7 @@ public class CategoryResource {
         return ResponseEntity.created(uri).build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Void> update(@Valid @RequestBody CategoryDTO objectDTO, @PathVariable Integer id) {
         Category object = service.fromDTO(objectDTO);
@@ -66,6 +69,7 @@ public class CategoryResource {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Category> delete(@PathVariable Integer id) {
         service.delete(id);

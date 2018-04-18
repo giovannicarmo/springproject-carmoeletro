@@ -1,18 +1,22 @@
 package com.giovannicarmo.projetocurso.carmoeletro.services;
 
+import com.giovannicarmo.projetocurso.carmoeletro.domain.Client;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.Order;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.OrderItem;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.TicketPayment;
 import com.giovannicarmo.projetocurso.carmoeletro.domain.enums.PaymentState;
-import com.giovannicarmo.projetocurso.carmoeletro.repositories.OrderItemRepository;
-import com.giovannicarmo.projetocurso.carmoeletro.repositories.OrderRepository;
-import com.giovannicarmo.projetocurso.carmoeletro.repositories.PaymentRepository;
-import com.giovannicarmo.projetocurso.carmoeletro.repositories.ProductRepository;
+import com.giovannicarmo.projetocurso.carmoeletro.repositories.*;
+import com.giovannicarmo.projetocurso.carmoeletro.security.UserSS;
+import com.giovannicarmo.projetocurso.carmoeletro.services.exception.AuthorizationExcepition;
 import com.giovannicarmo.projetocurso.carmoeletro.services.exception.ObjectNotFoundException;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.Date;
 
 @Service
@@ -32,6 +36,9 @@ public class OrderService {
 
     @Autowired
     private OrderItemRepository orderItemRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     public Order find (Integer id){
         Order object = repository.findOne(id);
@@ -59,5 +66,15 @@ public class OrderService {
         }
         orderItemRepository.save(object.getItems());
         return object;
+    }
+
+    public Page<Order> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        UserSS userSS = UserService.authenticated();
+        if(userSS == null) {
+            throw new AuthorizationExcepition("Access denied!");
+        }
+        PageRequest pageRequest = new PageRequest(page,linesPerPage,Sort.Direction.valueOf(direction), orderBy);
+        Client client = clientRepository.findOne(userSS.getId());
+        return repository.findByClient(client, pageRequest);
     }
 }

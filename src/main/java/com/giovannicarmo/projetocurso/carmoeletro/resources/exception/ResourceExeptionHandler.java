@@ -1,5 +1,6 @@
 package com.giovannicarmo.projetocurso.carmoeletro.resources.exception;
 
+import com.giovannicarmo.projetocurso.carmoeletro.services.exception.AuthorizationExcepition;
 import com.giovannicarmo.projetocurso.carmoeletro.services.exception.DataIntegrityException;
 import com.giovannicarmo.projetocurso.carmoeletro.services.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -40,5 +41,13 @@ public class ResourceExeptionHandler {
             error.addError(x.getField(), x.getDefaultMessage());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(AuthorizationExcepition.class)
+    public ResponseEntity<StandardError> authorization(AuthorizationExcepition e, HttpServletRequest request) {
+
+        StandardError error = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(),
+                System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 }
