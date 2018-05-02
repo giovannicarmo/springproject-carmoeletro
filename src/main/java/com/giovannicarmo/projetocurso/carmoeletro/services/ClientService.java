@@ -15,13 +15,18 @@ import com.giovannicarmo.projetocurso.carmoeletro.services.exception.Authorizati
 import com.giovannicarmo.projetocurso.carmoeletro.services.exception.DataIntegrityException;
 import com.giovannicarmo.projetocurso.carmoeletro.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.image.BufferedImage;
+import java.net.URI;
 import java.util.List;
 
 @Service
@@ -34,10 +39,19 @@ public class ClientService {
     private ClientRepository repository;
 
     @Autowired
-    private CityRepository cityRepository;
+    private AddressRepository addressRepository;
 
     @Autowired
-    private AddressRepository addressRepository;
+    private S3Service s3Service;
+
+    @Autowired
+    private ImageService imageService;
+
+    @Value("${img.prefix.client.profile}")
+    private String prefix;
+
+    @Value("${image.profile.size}")
+    private Integer size;
 
     public List<Client> findAll() {
         return repository.findAll();
@@ -62,6 +76,7 @@ public class ClientService {
         return repository.findAll(pageRequest);
     }
 
+    @Transactional
     public Client insert (Client object) {
         object.setId(null);
         object = repository.save(object);
@@ -87,7 +102,7 @@ public class ClientService {
     public Client fromDTO(ClientNewDTO objectDTO) {
         Client client = new Client (null, objectDTO.getName(), objectDTO.getEmail(), objectDTO.getCpfOrCnpj(),
                 ClientType.toEnum(objectDTO.getType()), passwordEncoder.encode(objectDTO.getPassword()));
-        City city = cityRepository.findOne(objectDTO.getCityId());
+        City city = new City(objectDTO.getCityId(), null, null);
         Address address = new Address(null, objectDTO.getPublicPlace(), objectDTO.getNumber(), objectDTO.getComplement(),
                 objectDTO.getNeighborhood(), objectDTO.getZipCode(), client, city);
         client.getAddresses().add(address);
@@ -105,5 +120,21 @@ public class ClientService {
     private void updateData(Client newObject, Client object) {
         newObject.setEmail(object.getEmail() );
         newObject.setName(object.getName());
+    }
+
+    public URI uploadProfilePicture(MultipartFile multipartFile) {
+
+        UserSS userSS = UserService.authenticated();
+        if (userSS == null) {
+            throw new AuthorizationExcepition("Access denied!");
+        }
+
+        BufferedImage jpgImage = imageService.getJpjImageFromFile(multipartFile);
+        jpgImage = imageService.cropSquare(jpgImage);
+        jpgImage = imageService.resize(jpgImage, size);
+
+        String fileName = prefix + userSS.getId() + ".jpg";
+
+        return s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
     }
 }
