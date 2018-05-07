@@ -4,7 +4,6 @@ import com.giovannicarmo.projetocurso.carmoeletro.domain.Client;
 import com.giovannicarmo.projetocurso.carmoeletro.dto.ClientDTO;
 import com.giovannicarmo.projetocurso.carmoeletro.dto.ClientNewDTO;
 import com.giovannicarmo.projetocurso.carmoeletro.services.ClientService;
-import com.giovannicarmo.projetocurso.carmoeletro.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @RestController
 @RequestMapping(value = "/clients")
@@ -50,8 +48,13 @@ public class ClientResource {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Client> find(@PathVariable Integer id) {
-
         Client object = service.find(id);
+        return ResponseEntity.ok().body(object);
+    }
+
+    @RequestMapping(value = "/email", method = RequestMethod.GET)
+    public ResponseEntity<Client> find(@RequestParam(value = "value") String email){
+        Client object = service.findByEmail(email);
         return ResponseEntity.ok().body(object);
     }
 

@@ -76,6 +76,22 @@ public class ClientService {
         return repository.findAll(pageRequest);
     }
 
+    public Client findByEmail(String email) {
+
+        UserSS userSS = UserService.authenticated();
+        if (userSS == null || !userSS.hasRole(Profile.ADIMIN) && !email.equals(userSS.getUsername())) {
+            throw new AuthorizationExcepition("Access denied!");
+        }
+
+        Client object = repository.findByEmail(email);
+        if (object == null) {
+            throw new ObjectNotFoundException(
+                    "Object not found! Id: " + userSS.getId() + ", type: " + Client.class.getName()
+            );
+        }
+        return object;
+    }
+
     @Transactional
     public Client insert (Client object) {
         object.setId(null);

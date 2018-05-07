@@ -39,10 +39,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
     private static final String[] PUBLIC_MATCHERS_GET = {
+            "/products/**",
+            "/categories/**",
+            "/states/**"
     };
-
     private static final String[] PUBLIC_MATCHERS_POST = {
+            "/clients/**",
             "/clients/picture"
+    };
+    private static final String[] PUBLIC_MATCHERS_PUT = {
     };
 
     @Override
@@ -54,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.cors().and().csrf().disable();
         http.authorizeRequests()
+                .antMatchers(HttpMethod.PUT, PUBLIC_MATCHERS_PUT).permitAll()
                 .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
                 .antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
                 .antMatchers(PUBLIC_MATCHERS).permitAll()
@@ -70,8 +76,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+        configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
